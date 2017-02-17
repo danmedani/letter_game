@@ -1,3 +1,8 @@
+'''
+ Letter Game Backend
+ Dan Medani 2017
+'''
+
 from __future__ import print_function
 
 import boto3
@@ -15,6 +20,9 @@ def respond(err, res=None):
         },
     }
 
+'''
+Is a string numeric?
+'''
 def isNumeric(st):
     try:
         v = int(st)
@@ -22,10 +30,16 @@ def isNumeric(st):
         return False
     return True
 
+'''
+Format a puzzle for the user.
+'''
 def formatPuzzle(puzz, k):
     puzzParts = puzz['phrase'].split(' ')
     return ' '.join([puzzPart if isNumeric(puzzPart) else puzzPart[0:k] for puzzPart in puzzParts])
 
+'''
+Grab user's next puzzle, format and return.
+'''
 def getNextPuzzle(user_id):
     users = boto3.resource('dynamodb').Table('lettergame_users')
     user = users.get_item(Key={'id': user_id})
@@ -46,7 +60,9 @@ def getNextPuzzle(user_id):
 
     return respond(None, formatPuzzle(nextPuzzle['Item'], 1))
 
-
+'''
+Main event handler for lambda.
+'''
 def lambda_handler(event, context):
     operations = {
         # 'DELETE': lambda phrases, x: phrases.delete_item(**x),
