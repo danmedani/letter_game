@@ -34,8 +34,17 @@ def isNumeric(st):
 Format a puzzle for the user.
 '''
 def formatPuzzle(puzz, k):
-    puzzParts = puzz['phrase'].split(' ')
-    return ' '.join([puzzPart if isNumeric(puzzPart) else puzzPart[0:k] for puzzPart in puzzParts])
+    phrase = puzz['phrase']
+    guessWord = puzz['guessWord']
+
+    puzzle = []
+    for i in xrange(len(phrase)):
+        if guessWord[i]:
+            puzzle.insert(len(puzzle), phrase[i][0:1])
+        else:
+            puzzle.insert(len(puzzle), phrase[i])
+
+    return ' '.join(puzzle)
 
 '''
 Grab user's next puzzle, format and return.
